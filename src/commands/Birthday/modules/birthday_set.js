@@ -20,12 +20,12 @@ export default {
             
             await InteractionHelper.safeEditReply(interaction, {
                 embeds: [successEmbed(
-                    `Your birthday has been set to **${result.data.monthName} ${result.data.day}**!`,
-                    "Birthday Set! 🎂"
+                    `Tu cumpleaños ha sido programado para**${result.data.monthName} ${result.data.day}**!`,
+                    "¡Conjunto de cumpleaños! 🎂"
                 )]
             });
         } catch (error) {
-            logger.error("Birthday set command execution failed", {
+            logger.error("Falló la ejecución del comando para establecer la fecha de cumpleaños.", {
                 error: error.message,
                 stack: error.stack,
                 userId: interaction.user.id,
@@ -39,6 +39,3 @@ export default {
         }
     }
 };
-
-
-
