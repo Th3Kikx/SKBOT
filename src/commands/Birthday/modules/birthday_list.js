@@ -19,15 +19,15 @@ export default {
             if (sortedBirthdays.length === 0) {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [createEmbed({
-                        title: '❌ No Birthdays',
-                        description: 'No birthdays have been set in this server yet.',
+                        title: '❌ Sin cumpleaños',
+                        description: 'Aún no se han establecido fechas de cumpleaños en este servidor.',
                         color: 'error'
                     })]
                 });
             }
 
             const embed = createEmbed({
-                title: "🎂 Server Birthdays",
+                title: "🎂 Cumpleaños del servidor",
                 color: 'info'
             });
 
@@ -58,8 +58,8 @@ export default {
             if (displayIndex === 0) {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [createEmbed({
-                        title: '❌ No Birthdays',
-                        description: 'No birthdays have been set by current server members.',
+                        title: '❌ Sin cumpleaños',
+                        description: 'Los miembros actuales del servidor no han establecido ninguna fecha de cumpleaños.',
                         color: 'error'
                     })]
                 });
@@ -72,7 +72,7 @@ export default {
 
             await InteractionHelper.safeEditReply(interaction, { embeds: [embed] });
             
-            logger.info('Birthday list retrieved successfully', {
+            logger.info('Lista de cumpleaños recuperada correctamente', {
                 userId: interaction.user.id,
                 guildId,
                 birthdayCount: displayIndex,
@@ -80,7 +80,7 @@ export default {
                 commandName: 'birthday_list'
             });
         } catch (error) {
-            logger.error("Birthday list command execution failed", {
+            logger.error("Falló la ejecución del comando de lista de cumpleaños.", {
                 error: error.message,
                 stack: error.stack,
                 userId: interaction.user.id,
@@ -94,6 +94,4 @@ export default {
         }
     }
 };
-
-
 
