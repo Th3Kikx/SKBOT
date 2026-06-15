@@ -22,9 +22,9 @@ import appDashboard from './modules/app_dashboard.js';
 function getApplicationStatusPresentation(statusValue) {
     const normalized = typeof statusValue === 'string' ? statusValue.trim().toLowerCase() : 'unknown';
     const statusLabel =
-        normalized === 'pending' ? 'In Progress' :
-        normalized === 'approved' ? 'Accepted' :
-        normalized === 'denied' ? 'Denied' :
+        normalized === 'pending' ? 'En curso' :
+        normalized === 'approved' ? 'Aceptado' :
+        normalized === 'denied' ? 'Denegado' :
         'Unknown';
     const statusEmoji =
         normalized === 'pending' ? '🟡' :
@@ -38,49 +38,49 @@ function getApplicationStatusPresentation(statusValue) {
 export default {
     data: new SlashCommandBuilder()
     .setName("app-admin")
-    .setDescription("Manage staff applications")
+    .setDescription("Administrar solicitudes de personal")
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .addSubcommand((subcommand) =>
         subcommand
             .setName("setup")
-            .setDescription("Set up a new application")
+            .setDescription("Configurar una nueva aplicación")
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("review")
-            .setDescription("Approve or deny an application")
+            .setDescription("Aprobar o denegar una solicitud")
             .addStringOption((option) =>
                 option
                     .setName("id")
-                    .setDescription("The application ID")
+                    .setDescription("La ID de la aplicación")
                     .setRequired(true),
             ),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("list")
-            .setDescription("List all applications")
+            .setDescription("Listar todas las aplicaciones")
             .addStringOption((option) =>
                 option
                     .setName("status")
-                    .setDescription("Filter by status")
+                    .setDescription("Filtrar por estado")
                     .addChoices(
-                        { name: "Pending", value: "pending" },
-                        { name: "Approved", value: "approved" },
-                        { name: "Denied", value: "denied" },
+                        { name: "Pendiente", value: "pending" },
+                        { name: "Aprovado", value: "approved" },
+                        { name: "Denegado", value: "denied" },
                     ),
             )
             .addStringOption((option) =>
-                option.setName("role").setDescription("Filter by role ID"),
+                option.setName("role").setDescription("Filtrar por ID de rol"),
             )
             .addUserOption((option) =>
-                option.setName("user").setDescription("Filter by user"),
+                option.setName("user").setDescription("Filtrar por usuario"),
             )
             .addNumberOption((option) =>
                 option
                     .setName("limit")
                     .setDescription(
-                        "Maximum number of applications to show (default: 10)",
+                        "Número máximo de aplicaciones a mostrar (predeterminado: 10)",
                     )
                     .setMinValue(1)
                     .setMaxValue(25),
@@ -89,11 +89,11 @@ export default {
     .addSubcommand((subcommand) =>
         subcommand
             .setName("dashboard")
-            .setDescription("Open the applications configuration dashboard")
+            .setDescription("Abra el panel de configuración de aplicaciones.")
             .addStringOption((option) =>
                 option
                     .setName("application")
-                    .setDescription("Select an application to configure")
+                    .setDescription("Seleccione una aplicación para configurar")
                     .setRequired(false)
                     .setAutocomplete(true),
             ),
@@ -104,7 +104,7 @@ export default {
     execute: withErrorHandling(async (interaction) => {
         if (!interaction.inGuild()) {
             return InteractionHelper.safeReply(interaction, {
-                embeds: [errorEmbed("This command can only be used in a server.")],
+                embeds: [errorEmbed("Este comando solo se puede utilizar en un servidor.")],
                 flags: ["Ephemeral"],
             });
         }
@@ -116,7 +116,7 @@ export default {
             await InteractionHelper.safeDefer(interaction, { flags: ['Ephemeral'] });
         }
 
-        logger.info(`App-admin command executed: ${subcommand}`, {
+        logger.info(`Comando de administrador de la aplicación ejecutado: ${subcommand}`, {
             userId: interaction.user.id,
             guildId: guild.id,
             subcommand
@@ -143,7 +143,7 @@ async function handleSetup(interaction) {
     // Ensure interaction hasn't been deferred/replied yet (safety check)
     if (interaction.deferred || interaction.replied) {
         return InteractionHelper.safeReply(interaction, {
-            embeds: [errorEmbed("This interaction has already been processed. Please try the command again.")],
+            embeds: [errorEmbed("Esta interacción ya ha sido procesada. Por favor, intente el comando de nuevo.")],
             flags: ["Ephemeral"],
         });
     }
@@ -151,34 +151,34 @@ async function handleSetup(interaction) {
     // Build modal using LabelBuilder API with a native role select dropdown
     const modal = new ModalBuilder()
         .setCustomId('app_setup_modal')
-        .setTitle('Set Up New Application');
+        .setTitle('Configurar una nueva aplicación');
 
     const roleSelect = new RoleSelectMenuBuilder()
         .setCustomId('role_id')
-        .setPlaceholder('Select the role users will apply for')
+        .setPlaceholder('Seleccione el rol para el que los usuarios se postularán.')
         .setRequired(true);
 
     const roleLabel = new LabelBuilder()
         .setLabel('Application Role')
-        .setDescription('The role that users will be applying for')
+        .setDescription('El puesto para el que los usuarios se postularán')
         .setRoleSelectMenuComponent(roleSelect);
 
     const appNameInput = new TextInputBuilder()
         .setCustomId('app_name')
         .setStyle(TextInputStyle.Short)
-        .setPlaceholder('e.g., Moderator, Helper, Developer')
+        .setPlaceholder('e.g., Moderador, Staff, Admin')
         .setMaxLength(50)
         .setMinLength(1)
         .setRequired(true);
 
     const appNameLabel = new LabelBuilder()
-        .setLabel('Application Name')
+        .setLabel('Nombre de la aplicación')
         .setTextInputComponent(appNameInput);
 
     const q1Input = new TextInputBuilder()
         .setCustomId('app_question_1')
         .setStyle(TextInputStyle.Short)
-        .setPlaceholder('Why do you want this role?')
+        .setPlaceholder('¿Por qué quieres este puesto?')
         .setMaxLength(100)
         .setMinLength(1)
         .setRequired(true);
@@ -190,7 +190,7 @@ async function handleSetup(interaction) {
     const q2Input = new TextInputBuilder()
         .setCustomId('app_question_2')
         .setStyle(TextInputStyle.Short)
-        .setPlaceholder('What experience do you have?')
+        .setPlaceholder('¿Qué experiencia tienes?')
         .setMaxLength(100)
         .setRequired(false);
 
@@ -220,7 +220,7 @@ async function handleSetup(interaction) {
     }).catch(() => null);
 
     if (!submitted) {
-        logger.info('App setup modal dismissed or timed out', { guildId: interaction.guild.id, userId: interaction.user.id });
+        logger.info('La ventana modal de configuración de la aplicación se cerró o expiró', { guildId: interaction.guild.id, userId: interaction.user.id });
         return;
     }
 
@@ -230,7 +230,7 @@ async function handleSetup(interaction) {
 
     if (!roleId) {
         await submitted.reply({
-            embeds: [errorEmbed('No Role Selected', 'You must select a role for the application.')],
+            embeds: [errorEmbed('No Role Selected', 'Debes seleccionar un rol para la solicitud.')],
             flags: ['Ephemeral'],
         });
         return;
@@ -246,7 +246,7 @@ async function handleSetup(interaction) {
     const role = await interaction.guild.roles.fetch(roleId).catch(() => null);
     if (!role) {
         await submitted.reply({
-            embeds: [errorEmbed('Invalid Role', 'The selected role could not be found.')],
+            embeds: [errorEmbed('Invalid Role', 'No se pudo encontrar el rol seleccionado.')],
             flags: ['Ephemeral'],
         });
         return;
@@ -256,7 +256,7 @@ async function handleSetup(interaction) {
     const existingRoles = await getApplicationRoles(interaction.client, interaction.guild.id);
     if (existingRoles.some(r => r.roleId === roleId)) {
         await submitted.reply({
-            embeds: [errorEmbed('Already Configured', `The role ${role} is already configured as an application.`)],
+            embeds: [errorEmbed('Already Configured', `El rol ${role} ya está configurado como una aplicación.`)],
             flags: ['Ephemeral'],
         });
         return;
@@ -282,7 +282,7 @@ async function handleSetup(interaction) {
 
     await submitted.reply({
         embeds: [successEmbed(
-            '✅ Application Created',
+            '✅ Aplicación creada',
             `**${appName}** application has been created for ${role}.\n\nYou can customize the log channel, manager roles, questions, and retention period in the dashboard.`,
         )],
         flags: ['Ephemeral'],
