@@ -18,8 +18,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         createEmbed({
-                            title: '❌ No Birthdays Found',
-                            description: 'No birthdays have been set up in this server yet. Use `/birthday set` to add birthdays!',
+                            title: '❌ No se encontraron cumpleaños',
+                            description: 'Aún no se han configurado cumpleaños en este servidor. ¡Usa `/birthday set` para añadir cumpleaños!',
                             color: 'error'
                         })
                     ]
@@ -27,8 +27,8 @@ export default {
             }
 
             const embed = createEmbed({
-                title: '🎂 Next 5 Upcoming Birthdays',
-                description: `Here are the next 5 birthdays in ${interaction.guild.name}:`,
+                title: '🎂 Próximos 5 cumpleaños',
+                description: `Aquí están los próximos 5 cumpleaños en ${interaction.guild.name}:`,
                 color: 'info'
             });
 
@@ -43,16 +43,16 @@ export default {
 
                 let timeUntil = '';
                 if (birthday.daysUntil === 0) {
-                    timeUntil = '🎉 **Today!**';
+                    timeUntil = '🎉 **Hoy!**';
                 } else if (birthday.daysUntil === 1) {
-                    timeUntil = '📅 **Tomorrow!**';
+                    timeUntil = '📅 **Mañana!**';
                 } else {
-                    timeUntil = `In ${birthday.daysUntil} day${birthday.daysUntil > 1 ? 's' : ''}`;
+                    timeUntil = `en ${birthday.daysUntil} Dias${birthday.daysUntil > 1 ? 's' : ''}`;
                 }
 
                 embed.addFields({
                     name: `${displayIndex}. ${member.displayName}`,
-                    value: `<@${birthday.userId}>\n📅 **Date:** ${birthday.monthName} ${birthday.day}\n⏰ **Time:** ${timeUntil}`,
+                    value: `<@${birthday.userId}>\n📅 **Fecha:** ${birthday.monthName} ${birthday.day}\n⏰ **Tiempo:** ${timeUntil}`,
                     inline: false
                 });
             }
@@ -61,8 +61,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         createEmbed({
-                            title: '❌ No Upcoming Birthdays',
-                            description: 'No upcoming birthdays found for current server members.',
+                            title: '❌ No hay cumpleaños próximos',
+                            description: 'No se encontraron cumpleaños próximos para los miembros actuales del servidor..',
                             color: 'error'
                         })
                     ]
@@ -70,20 +70,20 @@ export default {
             }
 
             embed.setFooter({
-                text: 'Use /birthday set to add your birthday!',
+                text: '¡Usa el conjunto /birthday para añadir tu fecha de nacimiento!',
                 iconURL: interaction.guild.iconURL()
             });
 
             await InteractionHelper.safeEditReply(interaction, { embeds: [embed] });
             
-            logger.info('Next birthdays retrieved successfully', {
+            logger.info('Próximos cumpleaños recuperados correctamente', {
                 userId: interaction.user.id,
                 guildId: interaction.guildId,
                 upcomingCount: displayIndex,
                 commandName: 'next_birthdays'
             });
         } catch (error) {
-            logger.error('Next birthdays command execution failed', {
+            logger.error('Falló la ejecución del comando de cumpleaños siguientes.', {
                 error: error.message,
                 stack: error.stack,
                 userId: interaction.user.id,
@@ -97,6 +97,4 @@ export default {
         }
     }
 };
-
-
 
