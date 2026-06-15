@@ -19,21 +19,21 @@ export default {
             if (result.success) {
                 await InteractionHelper.safeEditReply(interaction, {
                     embeds: [successEmbed(
-                        "Your birthday has been successfully removed from the server.",
-                        "Birthday Removed 🗑️"
+                        "Tu fecha de nacimiento se ha eliminado correctamente del servidor.¨,
+                        "Cumpleaños eliminado 🗑️"
                     )]
                 });
             } else if (result.notFound) {
                 await InteractionHelper.safeEditReply(interaction, {
                     embeds: [createEmbed({
-                        title: '❌ No Birthday Found',
-                        description: "You don't have a birthday set to remove.",
+                        title: '❌ No se encontró ningún cumpleaños',
+                        description: "No tienes ninguna fecha de cumpleaños configurada para eliminar.",
                         color: 'error'
                     })]
                 });
             }
         } catch (error) {
-            logger.error("Birthday remove command execution failed", {
+            logger.error("Falló la ejecución del comando para eliminar el cumpleaños.", {
                 error: error.message,
                 stack: error.stack,
                 userId: interaction.user.id,
