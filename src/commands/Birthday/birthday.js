@@ -14,15 +14,15 @@ import { InteractionHelper } from '../../utils/interactionHelper.js';
 export default {
     data: new SlashCommandBuilder()
         .setName('birthday')
-        .setDescription('Birthday system commands')
+        .setDescription('Comandos del sistema de cumpleaños')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('set')
-                .setDescription('Set your birthday')
+                .setDescription('Establece tu cumpleaños')
                 .addIntegerOption(option =>
                     option
                         .setName('month')
-                        .setDescription('Birth month (1-12)')
+                        .setDescription('Mes de nacimiento (1-12)')
                         .setRequired(true)
                         .setMinValue(1)
                         .setMaxValue(12)
@@ -30,7 +30,7 @@ export default {
                 .addIntegerOption(option =>
                     option
                         .setName('day')
-                        .setDescription('Birth day (1-31)')
+                        .setDescription('Dia de nacimiento (1-31)')
                         .setRequired(true)
                         .setMinValue(1)
                         .setMaxValue(31)
@@ -39,23 +39,23 @@ export default {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('info')
-                .setDescription('View birthday information')
+                .setDescription('Ver información de cumpleaños')
                 .addUserOption(option =>
                     option
                         .setName('user')
-                        .setDescription('User to check birthday for')
+                        .setDescription('User para comprobar el cumpleaños de')
                         .setRequired(false)
                 )
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('list')
-                .setDescription('List all birthdays in the server')
+                .setDescription('Lista todos los cumpleaños en el servidor')
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('remove')
-                .setDescription('Remove your birthday')
+                .setDescription('Quitar tu cumpleaños')
         )
         .addSubcommand(subcommand =>
             subcommand
@@ -65,11 +65,11 @@ export default {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('setchannel')
-                .setDescription('Set or disable the channel for birthday announcements. (Manage Server required)')
+                .setDescription('Configura o desactiva el canal para anuncios de cumpleaños. (Se requiere administrar el servidor).')
                 .addChannelOption(option =>
                     option
                         .setName('channel')
-                        .setDescription('The text channel for announcements. Leave empty to disable.')
+                        .setDescription('Canal de texto para anuncios. Déjelo vacío para desactivarlo.')
                         .addChannelTypes(ChannelType.GuildText)
                         .setRequired(false)
                 )
@@ -99,7 +99,7 @@ export default {
                     });
             }
         } catch (error) {
-            logger.error('Birthday command execution failed', {
+            logger.error('La ejecución del comando de cumpleaños falló', {
                 error: error.message,
                 stack: error.stack,
                 userId: interaction.user.id,
@@ -114,5 +114,3 @@ export default {
         }
     }
 };
-
-
